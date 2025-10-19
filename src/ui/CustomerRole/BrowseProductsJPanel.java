@@ -439,7 +439,17 @@ public class BrowseProductsJPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_btnRemoveOrderItemActionPerformed
 
     private void btnViewOrderItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnViewOrderItemActionPerformed
+    int selectedRowIndex = tblCart.getSelectedRow();
+        if (selectedRowIndex < 0) {
+            JOptionPane.showMessageDialog(this, "Please select an order item from the table first", "Warning", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
         
+        OrderItem selectedItem = (OrderItem) tblCart.getValueAt(selectedRowIndex, 0);
+        ViewOrderItemDetailJPanel voidjp = new ViewOrderItemDetailJPanel(userProcessContainer, selectedItem);
+        userProcessContainer.add("ViewOrderItemDetailJPanel", voidjp);
+        CardLayout layout = (CardLayout) userProcessContainer.getLayout();
+        layout.next(userProcessContainer);        
     }//GEN-LAST:event_btnViewOrderItemActionPerformed
 
     private void btnAddToCartActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddToCartActionPerformed
