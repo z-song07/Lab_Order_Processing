@@ -53,7 +53,7 @@ public class BrowseProductsJPanel extends javax.swing.JPanel {
             return;
         }
         
-    DefaultTableModel model = (DefaultTableModel) tblProductCatalog.getModel();
+        DefaultTableModel model = (DefaultTableModel) tblProductCatalog.getModel();
         model.setRowCount(0);
 
         for (Product p : selectedSupplier.getProductCatalog().getProductcatalog()) {
@@ -66,6 +66,29 @@ public class BrowseProductsJPanel extends javax.swing.JPanel {
         }
     
     }
+    
+    
+    private void populateProductTable(String keyword) {
+        
+        DefaultTableModel model = (DefaultTableModel) tblProductCatalog.getModel();
+        model.setRowCount(0);
+        
+        // check all suppliers' products and show only product with matching keyword name
+        for (Supplier s:supplierDirectory.getSupplierlist()) {
+            for (Product p : s.getProductCatalog().getProductcatalog()) {
+                if (p.getProdName().equalsIgnoreCase(keyword)) {
+                    
+                    Object row[] = new Object[4];
+                    row[0] = p;
+                    row[1] = p.getModelNumber();
+                    row[2] = p.getPrice();
+                    row[3] = p.getAvail();
+                    model.addRow(row);
+                }
+            }
+        }    
+    }
+        
     /** This method is called from within the constructor to
      * initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is
@@ -343,7 +366,8 @@ public class BrowseProductsJPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_btnModifyQuantityActionPerformed
 
     private void btnSearchProductActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchProductActionPerformed
-        
+        String productName = txtSearch.getText();
+        populateProductTable(productName);
     }//GEN-LAST:event_btnSearchProductActionPerformed
 
     private void btnRemoveOrderItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveOrderItemActionPerformed
