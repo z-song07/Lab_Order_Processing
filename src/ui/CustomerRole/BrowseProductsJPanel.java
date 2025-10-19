@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.table.DefaultTableModel;
+import model.MasterOrderList;
 
 
 /**
@@ -22,14 +23,49 @@ import javax.swing.table.DefaultTableModel;
  */
 public class BrowseProductsJPanel extends javax.swing.JPanel {
 
+    JPanel userProcessContainer;
+    SupplierDirectory supplierDirectory;
+    MasterOrderList masterOrderList;
+    
     /** Creates new form BrowseProducts */
-    public BrowseProductsJPanel() {
+    public BrowseProductsJPanel(JPanel userProcessContainer, SupplierDirectory supplierDirectory, MasterOrderList masterOrderList) {
         initComponents();
       
+        this.userProcessContainer = userProcessContainer;
+        this.supplierDirectory = supplierDirectory;
+        this.masterOrderList = masterOrderList;
+        
+        populateCombo();
+        populateProductTable();
+    }
+
+    private void populateCombo() {
+        for (Supplier s: supplierDirectory.getSupplierlist()) {
+            cmbSupplier.addItem(s);
+        }
     }
 
     
+    private void populateProductTable() {
+        Supplier selectedSupplier = (Supplier) cmbSupplier.getSelectedItem();
+        
+        if (selectedSupplier == null) {
+            return;
+        }
+        
+    DefaultTableModel model = (DefaultTableModel) tblProductCatalog.getModel();
+        model.setRowCount(0);
 
+        for (Product p : selectedSupplier.getProductCatalog().getProductcatalog()) {
+            Object row[] = new Object[4];
+            row[0] = p;
+            row[1] = p.getModelNumber();
+            row[2] = p.getPrice();
+            row[3] = p.getAvail();
+            model.addRow(row);
+        }
+    
+    }
     /** This method is called from within the constructor to
      * initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is
@@ -283,8 +319,7 @@ public class BrowseProductsJPanel extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void cmbSupplierActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbSupplierActionPerformed
-        // TODO add your handling code here:
-        
+        populateProductTable();
     }//GEN-LAST:event_cmbSupplierActionPerformed
 
     private void btnBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackActionPerformed
@@ -345,4 +380,6 @@ public class BrowseProductsJPanel extends javax.swing.JPanel {
     private javax.swing.JTextField txtSalesPrice;
     private javax.swing.JTextField txtSearch;
     // End of variables declaration//GEN-END:variables
+
+    
 }
