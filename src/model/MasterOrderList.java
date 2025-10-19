@@ -10,7 +10,7 @@ import java.util.ArrayList;
  *
  * @author csong
  */
-class MasterOrderList {
+public class MasterOrderList {
 
     ArrayList<Order> orderList;
 
@@ -30,4 +30,5 @@ class MasterOrderList {
         Order newOrder = new Order();
         orderList.add(newOrder);
     }
+    
 }
