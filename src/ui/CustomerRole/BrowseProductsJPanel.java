@@ -38,7 +38,8 @@ public class BrowseProductsJPanel extends javax.swing.JPanel {
         this.supplierDirectory = supplierDirectory;
         this.masterOrderList = masterOrderList;
         
-        currentOrder = masterOrderList.addNewOrder();
+        this.currentOrder = new Order();
+        
         populateCombo();
         populateProductTable();
         populateCartTable();
@@ -302,7 +303,7 @@ public class BrowseProductsJPanel extends javax.swing.JPanel {
                         .addComponent(btnBack, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(36, 36, 36)
                         .addComponent(lblTitle)))
-                .addContainerGap(30, Short.MAX_VALUE))
+                .addContainerGap(29, Short.MAX_VALUE))
         );
 
         layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {spnQuantity, txtSalesPrice});
@@ -323,8 +324,8 @@ public class BrowseProductsJPanel extends javax.swing.JPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(lblProductCatalogue)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(20, 20, 20)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnProductDetails)
                     .addComponent(lblSalesPrice)
@@ -332,23 +333,20 @@ public class BrowseProductsJPanel extends javax.swing.JPanel {
                     .addComponent(lblQuantity)
                     .addComponent(spnQuantity, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnAddToCart))
-                .addGap(18, 18, 18)
+                .addGap(20, 20, 20)
                 .addComponent(lblItemsInCart)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(20, 20, 20)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnViewOrderItem)
                     .addComponent(btnRemoveOrderItem)
                     .addComponent(btnModifyQuantity)
                     .addComponent(txtNewQuantity, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btnCheckOut, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(17, Short.MAX_VALUE))
+                .addContainerGap(56, Short.MAX_VALUE))
         );
-
-        layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {jScrollPane1, jScrollPane2});
-
     }// </editor-fold>//GEN-END:initComponents
 
     private void cmbSupplierActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbSupplierActionPerformed
@@ -356,6 +354,17 @@ public class BrowseProductsJPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_cmbSupplierActionPerformed
 
     private void btnBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackActionPerformed
+        // change the product availability back to original for current order
+        for (OrderItem oi : currentOrder.getOrderItemList()) {
+            Product p = oi.getProduct();
+            int quantityToAddBack = oi.getQuantity();
+            
+            // add the quantity back to the product's availability
+            p.setAvail(p.getAvail() + quantityToAddBack);
+        }
+        
+        
+        // Navigate back to customer work area jpanel
         userProcessContainer.remove(this);
         CardLayout layout = (CardLayout) userProcessContainer.getLayout();
         layout.previous(userProcessContainer);
@@ -377,8 +386,24 @@ public class BrowseProductsJPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_btnProductDetailsActionPerformed
 
     private void btnCheckOutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCheckOutActionPerformed
-        // TODO add your handling code here:
+        masterOrderList.addNewOrder(currentOrder);
+        currentOrder = new Order();
        
+        // repopulate tables
+        populateCombo();
+        populateProductTable();
+        populateCartTable();
+        
+        // reset 
+        txtNewQuantity.setText("");
+        txtSalesPrice.setText("");
+        txtSearch.setText("");
+        
+        spnQuantity.setValue(0);
+        
+        // display checkout successful
+        JOptionPane.showMessageDialog(this, "Thank you for your purchase. Order successfully placed!", "Warning", JOptionPane.WARNING_MESSAGE);
+
     }//GEN-LAST:event_btnCheckOutActionPerformed
 
     private void btnModifyQuantityActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModifyQuantityActionPerformed

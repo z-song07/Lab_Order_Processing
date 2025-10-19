@@ -71,7 +71,7 @@
                       <Component id="lblTitle" min="-2" max="-2" attributes="0"/>
                   </Group>
               </Group>
-              <EmptySpace pref="30" max="32767" attributes="0"/>
+              <EmptySpace pref="29" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -93,8 +93,8 @@
               <EmptySpace type="unrelated" max="-2" attributes="0"/>
               <Component id="lblProductCatalogue" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
-              <Component id="jScrollPane1" linkSize="2" min="-2" pref="100" max="-2" attributes="0"/>
-              <EmptySpace min="-2" pref="18" max="-2" attributes="0"/>
+              <Component id="jScrollPane1" min="-2" pref="94" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="20" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="btnProductDetails" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="lblSalesPrice" alignment="3" min="-2" max="-2" attributes="0"/>
@@ -103,20 +103,20 @@
                   <Component id="spnQuantity" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="btnAddToCart" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace type="separate" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="20" max="-2" attributes="0"/>
               <Component id="lblItemsInCart" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
-              <Component id="jScrollPane2" linkSize="2" min="-2" pref="110" max="-2" attributes="0"/>
-              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+              <Component id="jScrollPane2" min="-2" pref="93" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="20" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="btnViewOrderItem" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="btnRemoveOrderItem" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="btnModifyQuantity" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="txtNewQuantity" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace type="separate" max="-2" attributes="0"/>
+              <EmptySpace type="unrelated" max="-2" attributes="0"/>
               <Component id="btnCheckOut" min="-2" pref="40" max="-2" attributes="0"/>
-              <EmptySpace pref="17" max="32767" attributes="0"/>
+              <EmptySpace pref="56" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
