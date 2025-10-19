@@ -26,9 +26,10 @@ public class MasterOrderList {
         this.orderList = orderList;
     }
     
-    public void addNewOrder() {
+    public Order addNewOrder() {
         Order newOrder = new Order();
         orderList.add(newOrder);
+        return newOrder;
     }
     
 }

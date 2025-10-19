@@ -5,6 +5,8 @@
  */
 package model;
 
+import java.util.Objects;
+
 /**
  *
  * @author archil
@@ -60,5 +62,24 @@ public class Product {
         this.avail = avail;
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        // same object reference
+        if(this == obj) { 
+            return true;
+        }
+        // check if null or these are not the same type of class
+        if (obj == null || this.getClass() != obj.getClass()) {
+            return false;
+        }
+        Product selectedProduct = (Product) obj;
+        // compare the contents
+        return Objects.equals(selectedProduct.getProdName(), this.prodName) && selectedProduct.getModelNumber() == this.modelNumber && selectedProduct.getPrice() == this.price;
+    }
     
+    // override hash code
+    @Override
+    public int hashCode() {
+        return Objects.hash(prodName, modelNumber, price);
+    }
 }

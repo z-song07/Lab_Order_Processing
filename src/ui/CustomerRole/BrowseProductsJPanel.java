@@ -15,6 +15,8 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.table.DefaultTableModel;
 import model.MasterOrderList;
+import model.Order;
+import model.OrderItem;
 
 
 /**
@@ -26,6 +28,7 @@ public class BrowseProductsJPanel extends javax.swing.JPanel {
     JPanel userProcessContainer;
     SupplierDirectory supplierDirectory;
     MasterOrderList masterOrderList;
+    Order currentOrder;
     
     /** Creates new form BrowseProducts */
     public BrowseProductsJPanel(JPanel userProcessContainer, SupplierDirectory supplierDirectory, MasterOrderList masterOrderList) {
@@ -35,8 +38,10 @@ public class BrowseProductsJPanel extends javax.swing.JPanel {
         this.supplierDirectory = supplierDirectory;
         this.masterOrderList = masterOrderList;
         
+        currentOrder = masterOrderList.addNewOrder();
         populateCombo();
         populateProductTable();
+        populateCartTable();
     }
 
     private void populateCombo() {
@@ -187,6 +192,11 @@ public class BrowseProductsJPanel extends javax.swing.JPanel {
         spnQuantity.setModel(new javax.swing.SpinnerNumberModel(0, 0, null, 1));
 
         btnAddToCart.setText("Add to Cart");
+        btnAddToCart.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAddToCartActionPerformed(evt);
+            }
+        });
 
         btnProductDetails.setText("View Product Details");
         btnProductDetails.addActionListener(new java.awt.event.ActionListener() {
@@ -372,8 +382,34 @@ public class BrowseProductsJPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_btnCheckOutActionPerformed
 
     private void btnModifyQuantityActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModifyQuantityActionPerformed
-        // TODO add your handling code here:
+        int selectedRowIndex = tblCart.getSelectedRow();
+        if (selectedRowIndex < 0) {
+            JOptionPane.showMessageDialog(this, "Please select an order item from the table first", "Warning", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
         
+        OrderItem item = (OrderItem) tblCart.getValueAt(selectedRowIndex, 0);
+        int quantity = 0;
+        
+        try {
+            quantity = Integer.parseInt(txtNewQuantity.getText());
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Please check the format of the modified quantity field", "Warning", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        
+        // check the updated quantity is valid
+        int oldQuantity = item.getQuantity();
+        if ((item.getProduct().getAvail() + oldQuantity) < quantity) {
+            JOptionPane.showMessageDialog(this, "Please check product availability", "Warning", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        item.getProduct().setAvail(item.getProduct().getAvail()+ oldQuantity - quantity);
+        item.setQuantity(quantity);
+        
+        // refresh tables
+        populateProductTable();
+        populateCartTable();
     }//GEN-LAST:event_btnModifyQuantityActionPerformed
 
     private void btnSearchProductActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchProductActionPerformed
@@ -382,13 +418,101 @@ public class BrowseProductsJPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_btnSearchProductActionPerformed
 
     private void btnRemoveOrderItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveOrderItemActionPerformed
-       
+        // get the selected index from the table
+        int selectedRowIndex = tblCart.getSelectedRow();
+        if (selectedRowIndex < 0) {
+            JOptionPane.showMessageDialog(this, "Please select an order item to remove", "Warning", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        // get the selected order item
+        OrderItem item = (OrderItem) tblCart.getValueAt(selectedRowIndex, 0);
+        
+        // change the product's availability
+        item.getProduct().setAvail(item.getProduct().getAvail()+ item.getQuantity());
+        
+        // remove the order item from the order
+        currentOrder.removeOrderItem(item);
+        
+        // refresh tables
+        populateProductTable();
+        populateCartTable();
     }//GEN-LAST:event_btnRemoveOrderItemActionPerformed
 
     private void btnViewOrderItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnViewOrderItemActionPerformed
         
     }//GEN-LAST:event_btnViewOrderItemActionPerformed
 
+    private void btnAddToCartActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddToCartActionPerformed
+        // get sales price, quantity and selected product
+        int selectedRowIndex = tblProductCatalog.getSelectedRow();
+        if (selectedRowIndex < 0) {
+            JOptionPane.showMessageDialog(this, "Please select a product from the table first", "Warning", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        Product selectedProduct = (Product) tblProductCatalog.getValueAt(selectedRowIndex, 0);
+        
+        double salesPrice = 0;
+        int quantity = 0;
+        try {
+            salesPrice = Double.parseDouble(txtSalesPrice.getText());
+            quantity = (Integer) spnQuantity.getValue();
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Please check the price and quantity fields format.", "Warning", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        
+        // validate sales price
+        if ( salesPrice < selectedProduct.getPrice()) {
+            JOptionPane.showMessageDialog(this, "Price should be more than it is set in the price.", "Warning", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        
+        // validate quantity
+        if (quantity <= 0) {
+            JOptionPane.showMessageDialog(this, "Quantity must be more than 0.", "Warning", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        
+        OrderItem item = currentOrder.findProduct(selectedProduct);
+        // validate quantity
+        if (item == null) {
+            if (selectedProduct.getAvail() >= quantity) {
+                currentOrder.addNewOrderItem(selectedProduct, salesPrice,quantity);
+                selectedProduct.setAvail(selectedProduct.getAvail() - quantity);
+            } else {
+                JOptionPane.showMessageDialog(this, "Please check product availability", "Warning", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+        } else {
+            // check the updated quantity is valid
+            int oldQuantity = item.getQuantity();
+            if ((item.getProduct().getAvail() + oldQuantity) < quantity) {
+                JOptionPane.showMessageDialog(this, "Please check product availability", "Warning", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+            item.getProduct().setAvail(item.getProduct().getAvail()+ oldQuantity - quantity);
+            item.setQuantity(quantity);
+        }
+        
+        populateProductTable();
+        populateCartTable();
+        
+    }//GEN-LAST:event_btnAddToCartActionPerformed
+    
+    private void populateCartTable() {
+        
+        DefaultTableModel model = (DefaultTableModel) tblCart.getModel();
+        model.setRowCount(0);
+
+        for (OrderItem oi : currentOrder.getOrderItemList()) {
+            Object row[] = new Object[4];
+            row[0] = oi;
+            row[1] = oi.getSalesPrice();
+            row[2] = oi.getQuantity();
+            row[3] = oi.getTotal();
+            model.addRow(row);
+        }
+    }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAddToCart;
@@ -415,6 +539,8 @@ public class BrowseProductsJPanel extends javax.swing.JPanel {
     private javax.swing.JTextField txtSalesPrice;
     private javax.swing.JTextField txtSearch;
     // End of variables declaration//GEN-END:variables
+
+    
 
     
 }

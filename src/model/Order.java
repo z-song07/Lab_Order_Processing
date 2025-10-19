@@ -32,4 +32,17 @@ public class Order {
         OrderItem orderItem = new OrderItem(product, price, quantity);
         orderItemList.add(orderItem);
     }
+    
+    public OrderItem findProduct(Product selectedProduct) {
+        for (OrderItem ot: orderItemList) {
+            if (ot.getProduct().equals(selectedProduct)) {
+                return ot;
+            }
+        }
+        return null;
+    }
+    
+    public void removeOrderItem(OrderItem oi) {
+        orderItemList.remove(oi);
+    }
 }

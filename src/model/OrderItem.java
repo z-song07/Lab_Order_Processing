@@ -45,4 +45,13 @@ public class OrderItem {
         this.quantity = quantity;
     }
     
+    public double getTotal() {
+        return quantity*salesPrice;
+    }
+    
+    @Override
+    public String toString() {
+        return product.getProdName();
+    }
+    
 }
