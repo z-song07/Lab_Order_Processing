@@ -141,7 +141,13 @@ public class CreateNewProductJPanel extends javax.swing.JPanel {
         double price = 0.0;
         int quantity = 0;
         
+        String name = txtName.getText();
         // validate input
+        if (name.isBlank()) {
+            JOptionPane.showMessageDialog(this, "Name cannot be empty.", "Warning", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        
         try {
             
             price = Double.parseDouble(txtPrice.getText());
@@ -149,6 +155,13 @@ public class CreateNewProductJPanel extends javax.swing.JPanel {
             
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Please check the price and quanity formats", "Warning", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        
+        if (price < 0 || quantity < 0) {
+            // quantity can be zero
+            // some product can be 0
+            JOptionPane.showMessageDialog(this, "Price and quantity cannot be less than 0.", "Warning", JOptionPane.WARNING_MESSAGE);
             return;
         }
         

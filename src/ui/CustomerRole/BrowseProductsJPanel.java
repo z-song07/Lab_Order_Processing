@@ -386,7 +386,16 @@ public class BrowseProductsJPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_btnProductDetailsActionPerformed
 
     private void btnCheckOutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCheckOutActionPerformed
+        // check if the cart is empty
+        if(currentOrder == null || currentOrder.getOrderItemList().size() <=0) {
+            JOptionPane.showMessageDialog(this, "Please add item to check out", "Warning", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        
+        // add the order to the master list
         masterOrderList.addNewOrder(currentOrder);
+        
+        // reset the current order to a new order
         currentOrder = new Order();
        
         // repopulate tables
