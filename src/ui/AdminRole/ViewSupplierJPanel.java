@@ -31,7 +31,7 @@ public class ViewSupplierJPanel extends javax.swing.JPanel {
             model.removeRow(i);
         }
         for(Product p: supplier.getProductCatalog().getProductcatalog()){
-            Object row[] = new Object[3];
+            Object row[] = new Object[4];
             row[0] = p;
             row[1] = p.getModelNumber();
             row[2] = p.getPrice();

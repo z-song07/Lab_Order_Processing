@@ -138,7 +138,7 @@ public class AddSupplierJPanel extends javax.swing.JPanel {
         
         // validate email
         if (!isEmailValid(email)) {
-            JOptionPane.showMessageDialog(null, "Please enter the correct email format (hint: user@example.com)", "Warning", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Please enter the correct email format (example: user@gmail.com)", "Warning", JOptionPane.WARNING_MESSAGE);
             return;
         }
         
