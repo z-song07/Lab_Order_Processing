@@ -52,6 +52,13 @@ public class Supplier {
         this.email = email;
     }
 
+    public int numberOfProducts() {
+        if(productCatalog != null) {
+            return productCatalog.getProductcatalog().size();
+        } else {
+            return 0;
+        }
+    }
     
     @Override
     public String toString() {

@@ -3,6 +3,7 @@ package ui.SupplierRole;
 import model.Supplier;
 import model.SupplierDirectory;
 import java.awt.CardLayout;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 /**
@@ -93,6 +94,12 @@ public class LoginSupplierJPanel extends javax.swing.JPanel {
     private void btnFindActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFindActionPerformed
 
         Supplier supplier = (Supplier) cmbSupplier.getSelectedItem();
+        
+        if (supplier == null) {
+            JOptionPane.showMessageDialog(null, "Please select a supplier.", "Warning", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        
         SupplierWorkAreaJPanel swajp = new SupplierWorkAreaJPanel(userProcessContainer, supplier);
         userProcessContainer.add("SupplierWorkAreaJPanel", swajp);
         CardLayout layout = (CardLayout) userProcessContainer.getLayout();
