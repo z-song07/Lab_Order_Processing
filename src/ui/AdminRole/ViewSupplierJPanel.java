@@ -35,6 +35,7 @@ public class ViewSupplierJPanel extends javax.swing.JPanel {
             row[0] = p;
             row[1] = p.getModelNumber();
             row[2] = p.getPrice();
+            row[3] = p.getAvail();
             model.addRow(row);
         }
     }
@@ -53,17 +54,17 @@ public class ViewSupplierJPanel extends javax.swing.JPanel {
 
         productCatalog.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null}
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
             },
             new String [] {
-                "Product", "Model", "Price"
+                "Product", "Model", "Price", "Availability"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false
+                false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {

@@ -4,6 +4,7 @@ import model.Supplier;
 import model.SupplierDirectory;
 import java.awt.CardLayout;
 import java.awt.Component;
+import java.util.regex.Pattern;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
@@ -49,14 +50,8 @@ public class AddSupplierJPanel extends javax.swing.JPanel {
         lblName.setText("Name:");
 
         lblPhone.setText("Phone:");
-        lblPhone.setEnabled(false);
-
-        txtPhone.setEnabled(false);
 
         lblEmail.setText("Email:");
-        lblEmail.setEnabled(false);
-
-        txtEmail.setEnabled(false);
 
         btnAdd.setText("Add");
         btnAdd.addActionListener(new java.awt.event.ActionListener() {
@@ -123,10 +118,42 @@ public class AddSupplierJPanel extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
+        String name = txtName.getText();
+        String phone = txtPhone.getText();
+        String email = txtEmail.getText();
 
+        //validate empty
+        if (name.isBlank() || phone.isBlank() || email.isBlank()) {
+            JOptionPane.showMessageDialog(null, "All fields must be filled.", "Warning", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        
+        // validate phone
+        try {
+            int phoneNum = Integer.parseInt(phone);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Please enter numbers only for phone.", "Warning", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        
+        // validate email
+        if (!isEmailValid(email)) {
+            JOptionPane.showMessageDialog(null, "Please enter the correct email format (hint: user@example.com)", "Warning", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        
+        // create supplier and set values
         Supplier supplier = supplierDirectory.addSupplier();
-        supplier.setSupplyName(txtName.getText());
+        supplier.setSupplyName(name);
+        supplier.setEmail(email);
+        supplier.setPhone(phone);
+     
         JOptionPane.showMessageDialog(null, "Supplier added successfully!!", "Info", JOptionPane.INFORMATION_MESSAGE);
+        
+        // reset the fields
+        txtName.setText("");
+        txtPhone.setText("");
+        txtEmail.setText("");
     }//GEN-LAST:event_btnAddActionPerformed
 
     private void btnBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackActionPerformed
@@ -134,6 +161,18 @@ public class AddSupplierJPanel extends javax.swing.JPanel {
         backAction();
     }//GEN-LAST:event_btnBackActionPerformed
 
+    // method to validate email
+    private boolean isEmailValid(String email) {
+        // email regular expression
+        String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@" +
+                            "(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$";
+        // compile regex
+        Pattern p = Pattern.compile(emailRegex);
+        
+        // check if email matches the pattern
+        return email != null && p.matcher(email).matches();
+    }
+    
     private void backAction(){
         userProcessContainer.remove(this);
         Component [] componentArray = userProcessContainer.getComponents();
@@ -143,6 +182,8 @@ public class AddSupplierJPanel extends javax.swing.JPanel {
         CardLayout layout = (CardLayout) userProcessContainer.getLayout();
         layout.previous(userProcessContainer);
     }
+    
+    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAdd;

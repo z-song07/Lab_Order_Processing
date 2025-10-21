@@ -13,6 +13,8 @@ public class Supplier {
 
     private String supplyName;
     private ProductCatalog productCatalog;
+    private String phone;
+    private String email;
 
     public Supplier() {
         productCatalog = new ProductCatalog();
@@ -34,6 +36,23 @@ public class Supplier {
         this.productCatalog = productCatalog;
     }
 
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    
     @Override
     public String toString() {
         return supplyName; 
