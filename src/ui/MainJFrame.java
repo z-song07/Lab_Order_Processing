@@ -27,11 +27,14 @@ public class MainJFrame extends javax.swing.JFrame {
     MasterOrderList masterOrderList;
     
     public MainJFrame() {
+        
         initComponents();
+        btnLogout.setVisible(false);
         business = new Business();
         supplierDirectory = business.getSupplierDirectory();
         masterOrderList = business.getMasterOrderList();
         setSize(830,600);
+        
     }
 
     /**
@@ -48,6 +51,7 @@ public class MainJFrame extends javax.swing.JFrame {
         btnAdmin = new javax.swing.JButton();
         btnSupplier = new javax.swing.JButton();
         btnCustomer = new javax.swing.JButton();
+        btnLogout = new javax.swing.JButton();
         userProcessContainer = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -80,17 +84,29 @@ public class MainJFrame extends javax.swing.JFrame {
             }
         });
 
+        btnLogout.setText("Logout");
+        btnLogout.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnLogoutActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout controlPanelLayout = new javax.swing.GroupLayout(controlPanel);
         controlPanel.setLayout(controlPanelLayout);
         controlPanelLayout.setHorizontalGroup(
             controlPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(controlPanelLayout.createSequentialGroup()
-                .addContainerGap()
                 .addGroup(controlPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnCustomer, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnAdmin, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnSupplier, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(controlPanelLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(controlPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(btnCustomer, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(btnAdmin, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnSupplier, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(controlPanelLayout.createSequentialGroup()
+                        .addGap(35, 35, 35)
+                        .addComponent(btnLogout)))
+                .addContainerGap(8, Short.MAX_VALUE))
         );
 
         controlPanelLayout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {btnAdmin, btnCustomer, btnSupplier});
@@ -104,7 +120,9 @@ public class MainJFrame extends javax.swing.JFrame {
                 .addComponent(btnSupplier)
                 .addGap(18, 18, 18)
                 .addComponent(btnCustomer)
-                .addContainerGap(374, Short.MAX_VALUE))
+                .addGap(172, 172, 172)
+                .addComponent(btnLogout)
+                .addContainerGap(179, Short.MAX_VALUE))
         );
 
         splitPane.setLeftComponent(controlPanel);
@@ -130,26 +148,60 @@ public class MainJFrame extends javax.swing.JFrame {
     private void btnAdminActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAdminActionPerformed
 
         AdminWorkAreaJPanel awajp = new AdminWorkAreaJPanel(userProcessContainer, supplierDirectory);
+        userProcessContainer.removeAll();
         userProcessContainer.add("AdminWorkAreaJPanel",awajp);
         CardLayout layout = (CardLayout)userProcessContainer.getLayout();
         layout.next(userProcessContainer);
-
+        
+        // change visibility
+        btnAdmin.setVisible(false);
+        btnSupplier.setVisible(false);
+        btnCustomer.setVisible(false);
+        btnLogout.setVisible(true);
     }//GEN-LAST:event_btnAdminActionPerformed
 
     private void btnSupplierActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSupplierActionPerformed
 
         LoginSupplierJPanel ls = new LoginSupplierJPanel(userProcessContainer, supplierDirectory);
+        userProcessContainer.removeAll();
         userProcessContainer.add("LoginSupplierJPanel", ls);
         CardLayout layout = (CardLayout)userProcessContainer.getLayout();
         layout.next(userProcessContainer);
+        
+        // change visibility
+        btnAdmin.setVisible(false);
+        btnSupplier.setVisible(false);
+        btnCustomer.setVisible(false);
+        btnLogout.setVisible(true);
     }//GEN-LAST:event_btnSupplierActionPerformed
 
     private void btnCustomerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCustomerActionPerformed
         CustomerWorkAreaJPanel cwa = new CustomerWorkAreaJPanel(userProcessContainer, supplierDirectory, masterOrderList);
+        userProcessContainer.removeAll();
         userProcessContainer.add("CustomerWorkAreaJPanel", cwa);
         CardLayout layout = (CardLayout)userProcessContainer.getLayout();
         layout.next(userProcessContainer);
+        
+        // change visibility
+        btnAdmin.setVisible(false);
+        btnSupplier.setVisible(false);
+        btnCustomer.setVisible(false);
+        btnLogout.setVisible(true);
     }//GEN-LAST:event_btnCustomerActionPerformed
+
+    private void btnLogoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogoutActionPerformed
+        
+        // change visibility
+        btnAdmin.setVisible(true);
+        btnSupplier.setVisible(true);
+        btnCustomer.setVisible(true);
+        btnLogout.setVisible(false);
+        
+        // remove and refresh page
+        userProcessContainer.removeAll();
+        userProcessContainer.revalidate();
+        userProcessContainer.repaint();
+    }//GEN-LAST:event_btnLogoutActionPerformed
 
     /**
      * @param args the command line arguments
@@ -189,6 +241,7 @@ public class MainJFrame extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAdmin;
     private javax.swing.JButton btnCustomer;
+    private javax.swing.JButton btnLogout;
     private javax.swing.JButton btnSupplier;
     private javax.swing.JPanel controlPanel;
     private javax.swing.JSplitPane splitPane;

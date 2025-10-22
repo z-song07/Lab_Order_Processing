@@ -448,6 +448,11 @@ public class BrowseProductsJPanel extends javax.swing.JPanel {
 
     private void btnSearchProductActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchProductActionPerformed
         String productName = txtSearch.getText();
+        
+        if (productName.isBlank()) {
+            JOptionPane.showMessageDialog(this, "Search field cannot be empty", "Warning", JOptionPane.WARNING_MESSAGE);
+            return;        
+        }
         populateProductTable(productName);
     }//GEN-LAST:event_btnSearchProductActionPerformed
 
